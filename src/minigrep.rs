@@ -11,27 +11,28 @@ pub fn minigrep() {
         process::exit(1);
     });
 
-    println!("Searching for {}", config.query);
-    println!("In the file {}", config.file_path);
-
-    if let Err(e) = run(config) {
+    if let Err(e) = run(&config) {
         println!("Application error: {e}");
         process::exit(1)
     }
 
-    //loop through every chunk of words that is the same length as the text we are searching for and see if it matches
-    //if searching for one word, loop through everything in contents and all caps every instance
     //if searching for multiple words, can loop through by length of the phrase, if you run across a portion of the phrase go to point where the words in that found portion matches the position of the search phrase and see if it matches
     //ex: phrase = "a big fat dog" currently looking at in file == "we had a big": you would skip over two words in the file so that "a big" are the first two words and see if it mathes "a big fat dog"
     //for phrase in contents
 }
 
-fn run (config: Config) -> Result<(), Box<dyn Error>> {
-    let file_contents = fs::read_to_string(config.file_path)?;
+fn run(config: &Config) -> Result<(), Box<dyn Error>> {
+    let file_contents = fs::read_to_string(&config.file_path)?;
 
-    println!("{file_contents}");
+    println!("'{}' with all instances of '{}' highlighted:\n\n{}", config.file_path, config.query, file_contents);
 
     Ok(())
+}
+//loop through every chunk of words that is the same length as the text we are searching for and see if it matches
+    //if one of the words matches skip so that the matching word 
+//ex: phrase = "a big fat dog" currently looking at in file == "we had a big": you would skip over two words in the file so that "a big" are the first two words and see if it mathes "a big fat dog"
+fn find_instances(text: &mut String, phrase: &str) -> {
+
 }
 
 struct Config {
@@ -40,8 +41,8 @@ struct Config {
 }
 impl Config{
     fn build(args: &[String]) -> Result<Config, &'static str> {
-        if args.len() < 3 {
-            return Err("not enough arguments");
+        if args.len() != 3 {
+            return Err("Use only 2 arguments(search text and filename)");
         }
         let query = args[1].clone();
         let file_path = args[2].clone();
