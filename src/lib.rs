@@ -7,3 +7,5 @@ pub mod first_word;
 pub mod build_user;
 
 pub mod rectangle;
+
+pub mod minigrep;

@@ -1,9 +1,10 @@
 use rust_book_problems::{
-    vending_machine, 
-    guess_number, 
-    first_word, 
-    build_user, 
-    rectangle
+    // vending_machine, 
+    // guess_number, 
+    // first_word, 
+    // build_user, 
+    // rectangle,
+    minigrep,
 };
 
 fn main() {
@@ -21,5 +22,5 @@ fn main() {
 
     //vending_machine::get_product()
 
-
+    minigrep::minigrep()
 }

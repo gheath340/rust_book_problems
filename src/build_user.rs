@@ -10,8 +10,8 @@ pub struct User {
 pub fn build_user() -> User {
     let mut username = String::new();
     let mut email = String::new();
-    let mut sign_in_count = 0;
-    let mut active = false;
+    let sign_in_count = 0;
+    let active = false;
 
     println!("Enter username:");
     io::stdin()

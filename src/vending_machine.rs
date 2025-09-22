@@ -15,15 +15,6 @@ impl VendingMachine {
         }
     }
 
-    fn from_str(input: &str) -> Option<VendingMachine> {
-        match input {
-            "Soda" => Some(VendingMachine::Soda),
-            "Chips" => Some(VendingMachine::Chips),
-            "Candy" => Some(VendingMachine::Candy),
-            _ => None,
-        }
-    }
-
     fn from_input(input: &str) -> Option<VendingMachine> {
         if input.eq_ignore_ascii_case("Soda") {
             Some(VendingMachine::Soda)
