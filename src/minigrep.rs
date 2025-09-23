@@ -15,24 +15,52 @@ pub fn minigrep() {
         println!("Application error: {e}");
         process::exit(1)
     }
-
-    //if searching for multiple words, can loop through by length of the phrase, if you run across a portion of the phrase go to point where the words in that found portion matches the position of the search phrase and see if it matches
-    //ex: phrase = "a big fat dog" currently looking at in file == "we had a big": you would skip over two words in the file so that "a big" are the first two words and see if it mathes "a big fat dog"
-    //for phrase in contents
 }
 
 fn run(config: &Config) -> Result<(), Box<dyn Error>> {
-    let file_contents = fs::read_to_string(&config.file_path)?;
+    let mut file_contents = fs::read_to_string(&config.file_path)?;
 
-    println!("'{}' with all instances of '{}' highlighted:\n\n{}", config.file_path, config.query, file_contents);
+    find_instances(&mut file_contents, &config.query).unwrap_or_else(|err| {
+        println!("Issue finding phrase instances: {err}")
+    });
 
     Ok(())
 }
-//loop through every chunk of words that is the same length as the text we are searching for and see if it matches
-    //if one of the words matches skip so that the matching word 
-//ex: phrase = "a big fat dog" currently looking at in file == "we had a big": you would skip over two words in the file so that "a big" are the first two words and see if it mathes "a big fat dog"
-fn find_instances(text: &mut String, phrase: &str) -> {
 
+fn ascii_eq_ignore_case_bytes(a: &[u8], b: &[u8]) -> bool {
+    if a.len() != b.len() {
+        return false;
+    }
+    a.iter()
+        .zip(b.iter())
+        .all(|(&ac, &bc)| ac.to_ascii_lowercase() == bc.to_ascii_lowercase())
+}
+
+fn find_instances(text: &mut String, phrase: &String) -> Result<(), Box<dyn Error>> {
+    let phrase_bytes = phrase.as_bytes();
+    let text_bytes = unsafe { text.as_bytes_mut() };
+
+    if text_bytes.len() < phrase_bytes.len() {
+        return Err("Phrase can not be longer than text.".into());
+    }
+
+    for i in 0..=text_bytes.len() - phrase_bytes.len() {
+        if ascii_eq_ignore_case_bytes(&text_bytes[i..i + phrase_bytes.len()], phrase_bytes) {
+            let start_ok = i == 0 || text_bytes[i - 1].is_ascii_whitespace();
+            let end_ok = i + phrase_bytes.len() == text_bytes.len() ||
+                text_bytes[i + phrase_bytes.len()].is_ascii_whitespace();
+
+            if start_ok && end_ok {
+                for b in &mut text_bytes[i..i + phrase_bytes.len()] {
+                    if b.is_ascii_lowercase() {
+                        *b = b.to_ascii_uppercase();
+                    }
+            }
+            }
+        }
+    }
+    println!("{}", text);
+    Ok(())
 }
 
 struct Config {
