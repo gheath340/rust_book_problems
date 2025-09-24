@@ -20,9 +20,8 @@ pub fn minigrep() {
 fn run(config: &Config) -> Result<(), Box<dyn Error>> {
     let mut file_contents = fs::read_to_string(&config.file_path)?;
 
-    find_instances(&mut file_contents, &config.query).unwrap_or_else(|err| {
-        println!("Issue finding phrase instances: {err}")
-    });
+    find_instances(&mut file_contents, &config.query)?;
+    println!("{}", file_contents);
 
     Ok(())
 }
@@ -55,11 +54,10 @@ fn find_instances(text: &mut String, phrase: &String) -> Result<(), Box<dyn Erro
                     if b.is_ascii_lowercase() {
                         *b = b.to_ascii_uppercase();
                     }
-            }
+                }
             }
         }
     }
-    println!("{}", text);
     Ok(())
 }
 
@@ -70,11 +68,21 @@ struct Config {
 impl Config{
     fn build(args: &[String]) -> Result<Config, &'static str> {
         if args.len() != 3 {
-            return Err("Use only 2 arguments(search text and filename)");
+            return Err("Use 2 arguments(search text and filename)");
         }
         let query = args[1].clone();
         let file_path = args[2].clone();
 
         Ok(Config { query, file_path })
+    }
+}
+
+#[cfg(tests)]
+mod minigrep_test {
+    use super::run;
+
+    #[test]
+    fn unit_test() {
+
     }
 }
