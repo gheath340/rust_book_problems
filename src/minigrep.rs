@@ -11,17 +11,23 @@ pub fn minigrep() {
         process::exit(1);
     });
 
-    if let Err(e) = run(&config) {
+    if let Err(e) = read_and_run(&config) {
         println!("Application error: {e}");
         process::exit(1)
     }
 }
 
-fn run(config: &Config) -> Result<(), Box<dyn Error>> {
+fn read_and_run(config: &Config) -> Result<(), Box<dyn Error>> {
     let mut file_contents = fs::read_to_string(&config.file_path)?;
 
-    find_instances(&mut file_contents, &config.query)?;
-    println!("{}", file_contents);
+    run(&mut file_contents, &config.query)?;
+
+    Ok(())
+}
+
+fn run(text: &mut String, phrase: &String) -> Result<(), Box<dyn Error>> {
+    find_instances(text, phrase)?;
+    println!("{}", text);
 
     Ok(())
 }
@@ -77,12 +83,16 @@ impl Config{
     }
 }
 
-#[cfg(tests)]
+#[cfg(test)]
 mod minigrep_test {
-    use super::run;
+    use super::*;
 
     #[test]
-    fn unit_test() {
+    fn base_test() {
+        let mut text = String::from("This is this test for this text.");
+        let query = String::from("this");
 
+        let result = run(&mut text, &query);
+        assert!(result.is_ok());
     }
 }
