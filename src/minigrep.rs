@@ -6,6 +6,7 @@ use std::error::Error;
 pub fn minigrep() {
     //get args and assign
     let args: Vec<String> = env::args().collect();
+    //build config with filename and query
     let config = Config::build(&args).unwrap_or_else(|err| {
         println!("Problem parsing arguments: {err}");
         process::exit(1);
