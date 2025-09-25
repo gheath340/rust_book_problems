@@ -41,7 +41,7 @@ fn ascii_eq_ignore_case_bytes(a: &[u8], b: &[u8]) -> bool {
         .zip(b.iter())
         .all(|(&ac, &bc)| ac.to_ascii_lowercase() == bc.to_ascii_lowercase())
 }
-
+//breaks text and phrase into bytes and finds every instance where a portion of text matches phrase and makes it all caps
 fn find_instances(text: &mut String, phrase: &String) -> Result<(), Box<dyn Error>> {
     let phrase_bytes = phrase.as_bytes();
     let text_bytes = unsafe { text.as_bytes_mut() };
@@ -49,7 +49,7 @@ fn find_instances(text: &mut String, phrase: &String) -> Result<(), Box<dyn Erro
     if text_bytes.len() < phrase_bytes.len() {
         return Err("Phrase can not be longer than text.".into());
     }
-
+    //for every character necessary to look at take a chunk of text = to phrase length and compare it to phrase, all caps if =
     for i in 0..=text_bytes.len() - phrase_bytes.len() {
         if ascii_eq_ignore_case_bytes(&text_bytes[i..i + phrase_bytes.len()], phrase_bytes) {
             let start_ok = i == 0 || text_bytes[i - 1].is_ascii_whitespace();
@@ -67,7 +67,7 @@ fn find_instances(text: &mut String, phrase: &String) -> Result<(), Box<dyn Erro
     }
     Ok(())
 }
-
+//struct for the file path and search string
 struct Config {
     query: String,
     file_path: String
