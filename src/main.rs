@@ -5,7 +5,7 @@ use rust_book_problems::{
     // build_user, 
     // rectangle,
     //minigrep,
-    closure_practice,
+    //closure_practice,
 };
 
 fn main() {
@@ -25,5 +25,5 @@ fn main() {
 
     //minigrep::minigrep()
 
-    closure_practice::run()
+    //closure_practice::run()
 }

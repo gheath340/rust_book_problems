@@ -4,10 +4,8 @@ use std::process;
 use std::error::Error;
 
 pub fn minigrep() {
-    //get args and assign
-    let args: Vec<String> = env::args().collect();
-    //build config with file_path and query
-    let config = Config::build(&args).unwrap_or_else(|err| {
+    //build config with env args
+    let config = Config::build(env::args()).unwrap_or_else(|err| {
         println!("Problem parsing arguments: {err}");
         process::exit(1);
     });
@@ -73,14 +71,21 @@ struct Config {
     file_path: String
 }
 impl Config{
-    fn build(args: &[String]) -> Result<Config, &'static str> {
-        if args.len() != 3 {
-            return Err("Use 2 arguments(search text and filename)");
-        }
-        let query = args[1].clone();
-        let file_path = args[2].clone();
+    //iterate through args and assign to vars to build Config
+    //pass Iterator as arg because env.args() returns iterator
+    fn build(mut args: impl Iterator<Item = String>,) -> Result<Config, &'static str> {
+        args.next();
+        let query = match args.next() {
+            Some(arg) => arg,
+            None => return Err("No query string")
+        };
 
-        Ok(Config { query, file_path })
+        let file_path = match args.next() {
+            Some(arg) => arg,
+            None => return Err("No file path")
+        };
+
+        Ok(Config {query, file_path})
     }
 }
 
