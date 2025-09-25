@@ -6,18 +6,18 @@ use std::error::Error;
 pub fn minigrep() {
     //get args and assign
     let args: Vec<String> = env::args().collect();
-    //build config with filename and query
+    //build config with file_path and query
     let config = Config::build(&args).unwrap_or_else(|err| {
         println!("Problem parsing arguments: {err}");
         process::exit(1);
     });
-
+    //catches all errors of read_and_run, run, and find instances
     if let Err(e) = read_and_run(&config) {
         println!("Application error: {e}");
         process::exit(1)
     }
 }
-
+//read file contents from fileand call run
 fn read_and_run(config: &Config) -> Result<(), Box<dyn Error>> {
     let mut file_contents = fs::read_to_string(&config.file_path)?;
 
@@ -25,14 +25,14 @@ fn read_and_run(config: &Config) -> Result<(), Box<dyn Error>> {
 
     Ok(())
 }
-
+//run find_instances on text from file and search phrase, print out final result
 fn run(text: &mut String, phrase: &String) -> Result<(), Box<dyn Error>> {
     find_instances(text, phrase)?;
     println!("{}", text);
 
     Ok(())
 }
-
+//check each u8 reference to make sure its the same when lowercase
 fn ascii_eq_ignore_case_bytes(a: &[u8], b: &[u8]) -> bool {
     if a.len() != b.len() {
         return false;
