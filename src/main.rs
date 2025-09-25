@@ -4,7 +4,8 @@ use rust_book_problems::{
     // first_word, 
     // build_user, 
     // rectangle,
-    minigrep,
+    //minigrep,
+    closure_practice,
 };
 
 fn main() {
@@ -22,5 +23,7 @@ fn main() {
 
     //vending_machine::get_product()
 
-    minigrep::minigrep()
+    //minigrep::minigrep()
+
+    closure_practice::run()
 }

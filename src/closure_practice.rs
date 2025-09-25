@@ -15,10 +15,11 @@
 // The return type is a Vec of whatever the closure returns.
 pub fn run() {
     let input = vec![1,2,3,4,5];
-    let new_vec = apply_to_lengths(input, |item| item.to_string())
+    let new_vec = apply_to_lengths(input, |item| item.to_string());
+    println!("{:#?}", new_vec);
 }
 
-pub fn apply_to_lengths<T, K, F>(input: Vec<T>, f: F) -> Vec<K>
+fn apply_to_lengths<T, K, F>(input: Vec<T>, mut f: F) -> Vec<K>
 where
     F: FnMut(&T) -> K,
     {
